@@ -26,15 +26,15 @@ public:
   MinimalSubscriber()
   : Node("minimal_subscriber")
   {
-    std::function<void(const geometry_msgs::msg::Pose2D::SharedPtr msg)> fnc =
-                        std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1);
-    subscription_ = this->create_subscription<geometry_msgs::msg::Pose2D>("topic", fnc);
+    subscription_ = this->create_subscription<std_msgs::msg::String>(
+      "pos", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
   }
 
 private:
   void topic_callback(const geometry_msgs::msg::Pose2D::SharedPtr msg) const
   {
-    RCLCPP_INFO(this->get_logger(), "I heard: '{x: %f, y: %f, theta: %f}'", msg->x, msg->y, msg->theta);
+    RCLCPP_INFO(this->get_logger(), "I heard: '{x: %f, y: %f, theta: %f}'",
+                                                    msg->x, msg->y, msg->theta);
   }
   rclcpp::Subscription<geometry_msgs::msg::Pose2D>::SharedPtr subscription_;
 };

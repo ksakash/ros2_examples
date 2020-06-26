@@ -30,7 +30,7 @@ public:
   MinimalPublisher()
   : Node("minimal_publisher"), count_(0)
   {
-    publisher_ = this->create_publisher<geometry_msgs::msg::Pose2D>("topic", 10);
+    publisher_ = this->create_publisher<geometry_msgs::msg::Pose2D>("pos", 10);
     timer_ = this->create_wall_timer(
       500ms, std::bind(&MinimalPublisher::timer_callback, this));
   }
@@ -43,7 +43,7 @@ private:
     message.y = count_++;
     message.theta = count_++;
     RCLCPP_INFO(this->get_logger(), "Publishing: '{x: %f, y: %f, theta: %f}'",
-                                                              message.x, message.y, message.theta);
+                                          message.x, message.y, message.theta);
     publisher_->publish(message);
   }
   rclcpp::TimerBase::SharedPtr timer_;
