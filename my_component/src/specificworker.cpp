@@ -23,7 +23,11 @@
 */
 SpecificWorker::SpecificWorker(MapPrx& mprx) : GenericWorker(mprx)
 {
-
+	rclcpp::init (0, nullptr);
+	node_ = rclcpp::Node::make_shared("my_publisher");
+	publisher_ = node_->create_publisher<std_msgs::msg::String>("chatter", 10);
+	subscriber_ = node_->create_subscription<std_msgs::msg::String>("listener", 10,
+									std::bind(&SpecificWorker::cb, this, std::placeholders::_1));
 }
 
 /**
@@ -32,6 +36,10 @@ SpecificWorker::SpecificWorker(MapPrx& mprx) : GenericWorker(mprx)
 SpecificWorker::~SpecificWorker()
 {
 	std::cout << "Destroying SpecificWorker" << std::endl;
+}
+
+void SpecificWorker::cb (const std_msgs::msg::String::SharedPtr msg) const {
+	RCLCPP_INFO(node_->get_logger(), "I heard: '%s'", msg->data.c_str());
 }
 
 bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
@@ -45,12 +53,6 @@ bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
 //		innerModel = std::make_shared(innermodel_path);
 //	}
 //	catch(const std::exception &e) { qFatal("Error reading config params"); }
-
-
-
-
-	
-
 	return true;
 }
 
@@ -76,6 +78,9 @@ void SpecificWorker::compute()
 //	{
 //		std::cout << "Error reading from Camera" << e << std::endl;
 //	}
+	std_msgs::msg::String message;
+	message.data = "Hello world: " + std::to_string(count_++);
+    publisher_->publish(message);
 }
 
 

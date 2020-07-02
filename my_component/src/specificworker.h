@@ -27,8 +27,15 @@
 #ifndef SPECIFICWORKER_H
 #define SPECIFICWORKER_H
 
+#include <memory>
+
 #include <genericworker.h>
 #include <innermodel/innermodel.h>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+
+using namespace std::chrono_literals;
 
 class SpecificWorker : public GenericWorker
 {
@@ -37,14 +44,17 @@ public:
 	SpecificWorker(MapPrx& mprx);
 	~SpecificWorker();
 	bool setParams(RoboCompCommonBehavior::ParameterList params);
-
+	void cb (const std_msgs::msg::String::SharedPtr msg) const;
 
 public slots:
 	void compute();
 	void initialize(int period);
 private:
 	std::shared_ptr<InnerModel> innerModel;
-
+	rclcpp::Node::SharedPtr node_;
+	rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+	rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscriber_;
+	int count_ = 0;
 };
 
 #endif
