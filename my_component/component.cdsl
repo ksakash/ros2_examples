@@ -1,0 +1,11 @@
+import "Laser.idsl";
+
+Component MyFirstComp
+{
+    Communications
+    {
+        requires Laser;
+    };
+    language Cpp;
+};
+
