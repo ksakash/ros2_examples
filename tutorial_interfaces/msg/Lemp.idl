@@ -1,0 +1,13 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from tutorial_interfaces/msg/Lemp.msg
+// generated code does not contain a copyright notice
+
+#include "tutorial_interfaces/msg/Temp.idl"
+
+module tutorial_interfaces {
+  module msg {
+    struct Lemp {
+      tutorial_interfaces::msg::Temp wtf;
+    };
+  };
+};
